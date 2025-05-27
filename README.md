@@ -1,11 +1,11 @@
 # KWIC em Haskell - The One
 
 ## Compilation
-\`\`\`bash
+```bash
 ghc -o kwic kwic.hs
-\`\`\`
+```
 
 ## Usage
-\`\`\`bash
+```bash
 ./kwic input.txt
-\`\`\`
+```
