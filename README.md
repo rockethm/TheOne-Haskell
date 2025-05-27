@@ -1,2 +1,11 @@
-# TheOne-Haskell
-Implementação de Keyboard-In-Context na linguagem de programação Haskell seguindo o estilo The One de Crista Lopes
+# KWIC em Haskell - The One
+
+## Compilation
+\`\`\`bash
+ghc -o kwic kwic.hs
+\`\`\`
+
+## Usage
+\`\`\`bash
+./kwic input.txt
+\`\`\`
