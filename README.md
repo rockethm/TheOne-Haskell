@@ -28,7 +28,7 @@ Para executar este programa, é necessário ter o GHC (Glasgow Haskell Compiler)
 Para compilar o programa, execute o seguinte comando no terminal:
 
 ```bash
-ghc -o kwic kwic.hs
+ghc -o kwic Main.hs
 ```
 
 #### Execução
@@ -126,3 +126,49 @@ O programa inclui uma lista predefinida de palavras comuns em português e ingl�
 A implementação em Haskell aproveita as características funcionais da linguagem, mantendo todas as funções puras exceto pelas operações de entrada e saída. O tratamento de casos especiais, como palavras não encontradas durante o deslocamento circular, é realizado através de pattern matching e tipos Maybe, garantindo robustez do programa.
 
 O programa demonstra como o estilo "The One" pode ser naturalmente implementado em Haskell, aproveitando o sistema de tipos da linguagem e sua orientação funcional para criar uma solução elegante e expressiva para o problema KWIC.
+
+### Testes Automatizados
+
+A avaliação também requer a implementação de **testes unitários** para as principais funções do algoritmo KWIC. Esses testes foram desenvolvidos com a biblioteca [HUnit](https://hackage.haskell.org/package/HUnit), compatível com a linguagem Haskell.
+
+#### Estilo "The One" nos Testes
+
+Seguindo o estilo de programação *The One*, os testes utilizam a mesma abstração `wrap`, `bind` e `unwrap` aplicada na lógica principal do programa. Essa abordagem reforça a consistência de estilo em todo o projeto, inclusive nos testes.
+
+Exemplo:
+
+```haskell
+testSplitIntoLines = TestCase $
+  let input = "The quick brown fox\nA brown cat sat\nThe cat is brown\n"
+      expected = ["The quick brown fox", "A brown cat sat", "The cat is brown"]
+      result = unwrap (wrap input `bind` splitIntoLines)
+  in assertEqual "Split lines using The One" expected result
+```
+
+#### Como Executar os Testes
+
+1. Certifique-se de ter a biblioteca `HUnit` instalada.
+2. Compile o arquivo de testes com o seguinte comando:
+
+```bash
+ghc -o test TestKWIC.hs -main-is TestKWIC.main -package HUnit
+```
+
+3. Execute os testes no terminal:
+
+```bash
+./test
+```
+
+A saída exibirá os resultados de cada verificação feita.
+
+---
+
+### Arquivos Entregues
+
+- `Main.hs`: Contém a função principal que chama o módulo KWIC
+- `Kwic.hs`: Implementação do algoritmo KWIC utilizando o estilo The One
+- `TestKWIC.hs`: Testes automatizados que seguem o mesmo estilo
+- `README.md`: Documentação detalhada do projeto e instruções de execução
+
+---
