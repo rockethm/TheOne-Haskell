@@ -6,6 +6,7 @@ import Main (
   splitIntoLines, cleanAndSplitWords, isStopWord,
   generateKeywordContexts, generateAllKeywordContexts, sortKeywordContexts
   )
+import Distribution.Simple.Test (test)
 
 -- Test using The One style for splitIntoLines
 testSplitIntoLines = TestCase $
@@ -48,6 +49,20 @@ testGenerateAllKeywordContexts = TestCase $
       result = unwrap (wrap inputLines `bind` generateAllKeywordContexts)
   in assertEqual "generateAllKeywordContexts" expected result
 
+-- Test: createCircularShifts
+testCreateCircularShifts = TestCase $
+  let input = [("cat", "The cat is brown")]
+      expected = [("cat is brown The", "The cat is brown")]
+      result = unwrap (wrap input `bind` createCircularShifts)
+  in assertEqual "createCircularShifts" expected result
+
+-- Test: applyCircularShifts
+testApplyCircularShifts = TestCase $
+  let input = [("cat", "The cat is brown")]
+      expected = [("cat is brown The", "The cat is brown")]
+      result = unwrap (wrap input `bind` applyCircularShifts)
+  in assertEqual "applyCircularShifts" expected result
+
 -- Test: sortKeywordContexts
 testSortKeywordContexts = TestCase $
   let input =
@@ -63,13 +78,23 @@ testSortKeywordContexts = TestCase $
       result = unwrap (wrap input `bind` sortKeywordContexts)
   in assertEqual "sortKeywordContexts" expected result
 
+-- Test: formatOutput
+testFormatOutput = TestCase $
+  let input = [("cat", "The cat is brown")]
+      expected = ["cat (from \"The cat is brown\")"]
+      result = unwrap (wrap input `bind` formatOutput)
+  in assertEqual "formatOutput" expected result
+
 tests = TestList
   [ TestLabel "Split Into Lines" testSplitIntoLines
   , TestLabel "Clean And Split Words" testCleanAndSplitWords
   , TestLabel "Is Stop Word" testIsStopWord
   , TestLabel "generateKeywordContexts" testGenerateKeywordContexts
   , TestLabel "generateAllKeywordContexts" testGenerateAllKeywordContexts
+  , TestLabel "createCircularShifts" testCreateCircularShifts
+  , TestLabel "applyCircularShifts" testApplyCircularShifts
   , TestLabel "sortKeywordContexts" testSortKeywordContexts
+  , TestLabel "formatOutput" testFormatOutput
   ]
 
 main :: IO Counts
