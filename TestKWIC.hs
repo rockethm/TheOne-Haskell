@@ -4,7 +4,8 @@ import Test.HUnit
 import Main (
   TFTheOne(..), wrap, bind, unwrap,
   splitIntoLines, cleanAndSplitWords, isStopWord,
-  generateKeywordContexts, generateAllKeywordContexts, sortKeywordContexts
+  generateKeywordContexts, generateAllKeywordContexts, createCircularShift, 
+  applyCircularShifts, sortKeywordContexts, formatOutput
   )
 import Distribution.Simple.Test (test)
 
