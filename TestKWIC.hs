@@ -3,7 +3,8 @@ module TestKWIC where
 import Test.HUnit
 import Main (
   TFTheOne(..), wrap, bind, unwrap,
-  splitIntoLines, cleanAndSplitWords, isStopWord
+  splitIntoLines, cleanAndSplitWords, isStopWord,
+  generateKeywordContexts, generateAllKeywordContexts, sortKeywordContexts
   )
 
 -- Test using The One style for splitIntoLines
@@ -24,10 +25,51 @@ testCleanAndSplitWords = TestCase $
 testIsStopWord = TestCase $
   assertBool "'the' is stop word" (isStopWord "the")
 
+-- Test: generateKeywordContexts
+testGenerateKeywordContexts = TestCase $
+  let input = "The brown fox jumps"
+      expected =
+        [ ("brown", input)
+        , ("fox", input)
+        , ("jumps", input)
+        ]
+      result = unwrap (wrap input `bind` generateKeywordContexts)
+  in assertEqual "generateKeywordContexts" expected result
+
+-- Test: generateAllKeywordContexts
+testGenerateAllKeywordContexts = TestCase $
+  let inputLines = ["Jump high", "The dog sleeps"]
+      expected =
+        [ ("jump", "Jump high")
+        , ("high", "Jump high")
+        , ("dog", "The dog sleeps")
+        , ("sleeps", "The dog sleeps")
+        ]
+      result = unwrap (wrap inputLines `bind` generateAllKeywordContexts)
+  in assertEqual "generateAllKeywordContexts" expected result
+
+-- Test: sortKeywordContexts
+testSortKeywordContexts = TestCase $
+  let input =
+        [ ("zebra", "A zebra")
+        , ("apple", "An apple")
+        , ("monkey", "A monkey")
+        ]
+      expected =
+        [ ("apple", "An apple")
+        , ("monkey", "A monkey")
+        , ("zebra", "A zebra")
+        ]
+      result = unwrap (wrap input `bind` sortKeywordContexts)
+  in assertEqual "sortKeywordContexts" expected result
+
 tests = TestList
   [ TestLabel "Split Into Lines" testSplitIntoLines
   , TestLabel "Clean And Split Words" testCleanAndSplitWords
   , TestLabel "Is Stop Word" testIsStopWord
+  , TestLabel "generateKeywordContexts" testGenerateKeywordContexts
+  , TestLabel "generateAllKeywordContexts" testGenerateAllKeywordContexts
+  , TestLabel "sortKeywordContexts" testSortKeywordContexts
   ]
 
 main :: IO Counts
