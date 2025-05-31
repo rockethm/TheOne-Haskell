@@ -7,7 +7,6 @@ import Main (
   generateKeywordContexts, generateAllKeywordContexts, createCircularShift, 
   applyCircularShifts, sortKeywordContexts, formatOutput
   )
-import Distribution.Simple.Test (test)
 
 -- Test using The One style for splitIntoLines
 testSplitIntoLines = TestCase $
@@ -50,12 +49,12 @@ testGenerateAllKeywordContexts = TestCase $
       result = unwrap (wrap inputLines `bind` generateAllKeywordContexts)
   in assertEqual "generateAllKeywordContexts" expected result
 
--- Test: createCircularShifts
-testCreateCircularShifts = TestCase $
+-- Test: createCircularShift
+testCreateCircularShift = TestCase $
   let input = [("cat", "The cat is brown")]
       expected = [("cat is brown The", "The cat is brown")]
-      result = unwrap (wrap input `bind` createCircularShifts)
-  in assertEqual "createCircularShifts" expected result
+      result = unwrap (wrap input `bind` applyCircularShifts)
+  in assertEqual "createCircularShift" expected result
 
 -- Test: applyCircularShifts
 testApplyCircularShifts = TestCase $
@@ -92,7 +91,7 @@ tests = TestList
   , TestLabel "Is Stop Word" testIsStopWord
   , TestLabel "generateKeywordContexts" testGenerateKeywordContexts
   , TestLabel "generateAllKeywordContexts" testGenerateAllKeywordContexts
-  , TestLabel "createCircularShifts" testCreateCircularShifts
+  , TestLabel "createCircularShift" testCreateCircularShift
   , TestLabel "applyCircularShifts" testApplyCircularShifts
   , TestLabel "sortKeywordContexts" testSortKeywordContexts
   , TestLabel "formatOutput" testFormatOutput
